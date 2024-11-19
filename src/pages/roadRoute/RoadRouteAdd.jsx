@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Input from "../../components/Form/Input";
 import { useInput } from "../../hooks/use-input";
-import { isFloatNumber, isNotEmpty } from "../../validation/Validations";
+import { isFloatNumber, isNotEmpty } from "../../validation/validations";
 import { GoSync } from "react-icons/go";
 
 const RoadRouteAdd = () => {
@@ -76,7 +76,7 @@ const RoadRouteAdd = () => {
                 inputStyle={`w-full lg:w-[350px] h-[40px]`}
                 label={
                   <>
-                    Route ID <span className="text-burnt-orange">*</span>
+                    Route ID <span className="text-red-600">*</span>
                   </>
                 }
                 value={routeId}
@@ -96,7 +96,7 @@ const RoadRouteAdd = () => {
                 onBlur={handleRouteNameBlur}
                 label={
                   <>
-                    Route Name <span className="text-burnt-orange">*</span>
+                    Route Name <span className="text-red-600">*</span>
                   </>
                 }
                 error={routeNameHasError && "Please enter valid route name"}
@@ -111,7 +111,7 @@ const RoadRouteAdd = () => {
                 inputStyle={`w-full lg:w-[350px] h-[40px]`}
                 label={
                   <>
-                    Distance <span className="text-burnt-orange">*</span>
+                    Distance <span className="text-red-600">*</span>
                   </>
                 }
                 value={distance}
@@ -129,7 +129,7 @@ const RoadRouteAdd = () => {
                 inputStyle={`w-full lg:w-[350px] h-[40px]`}
                 label={
                   <>
-                    Estimated Time <span className="text-burnt-orange">*</span>
+                    Estimated Time <span className="text-red-600">*</span>
                   </>
                 }
                 value={estimatedTime}

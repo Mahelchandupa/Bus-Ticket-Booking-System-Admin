@@ -14,7 +14,7 @@ const Sidebar = () => {
   const Menus = [
     { title: "Dashboard", icon: <FaChartLine />, gap: true },
     { title: "Routes", icon: <FaMapMarkedAlt />, path: "/add-road-routes" },
-    { title: "Buses", icon: <FaBusAlt /> },
+    { title: "Buses", icon: <FaBusAlt />, path: "/add-bus" },
     { title: "Schedule ", icon: <FaCalendarAlt /> },
     { title: "Accounts", icon: <FaUserFriends /> },
     { title: "Setting", icon: <FaCog /> },
