@@ -6,12 +6,14 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { FaCog } from "react-icons/fa";
 import { FaChartLine } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(true);
   const Menus = [
     { title: "Dashboard", icon: <FaChartLine />, gap: true },
-    { title: "Routes", icon: <FaMapMarkedAlt /> },
+    { title: "Routes", icon: <FaMapMarkedAlt />, path: "/add-road-routes" },
     { title: "Buses", icon: <FaBusAlt /> },
     { title: "Schedule ", icon: <FaCalendarAlt /> },
     { title: "Accounts", icon: <FaUserFriends /> },
@@ -33,6 +35,7 @@ const Sidebar = () => {
       <ul className="pt-6">
         {Menus.map((Menu, index) => (
           <li
+            onClick={() => navigate(Menu.path)}
             key={index}
             className={`flex  rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm sm:text-lg items-center gap-x-4 
               ${Menu.gap ? "mt-9" : "mt-4"} ${
