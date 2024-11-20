@@ -3,6 +3,7 @@ import Root from "../Layout/Root";
 import Dashboard from "../pages/Dashboard";
 import RoadRouteAdd from "../pages/roadRoute/RoadRouteAdd";
 import BusAdd from "../pages/bus/BusAdd";
+import Login from "../pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       }
     ],
   },
+  {
+    path: "/login",
+    element: <Login />,
+  }
 ]);
 
 export default router;
