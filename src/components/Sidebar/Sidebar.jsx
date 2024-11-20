@@ -8,9 +8,8 @@ import { FaChartLine } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ setExpandSideBar, expandSideBar }) => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
   const Menus = [
     { title: "Dashboard", icon: <FaChartLine />, gap: true },
     { title: "Routes", icon: <FaMapMarkedAlt />, path: "/add-road-routes" },
@@ -23,14 +22,14 @@ const Sidebar = () => {
   return (
     <div
       className={` ${
-        open ? "w-64" : "w-20 "
-      }  bg-gray-800 h-screen p-5  relative duration-300 pt-20 border-r-[4px] border-red-500`}
+        expandSideBar ? "w-64" : "w-20"
+      }  bg-gray-800 h-screen p-5 fixed duration-300 pt-20 border-r-[4px] border-red-500`}
     >
       <img
         src={ControlIcon}
         className={`absolute cursor-pointer -right-5 top-24 w-9 border-dark-purple
-           border-2 rounded-full  ${!open && "rotate-180"}`}
-        onClick={() => setOpen(!open)}
+           border-2 rounded-full  ${!expandSideBar && "rotate-180"}`}
+        onClick={() => setExpandSideBar(!expandSideBar)}
       />
       <ul className="pt-6">
         {Menus.map((Menu, index) => (
@@ -43,7 +42,7 @@ const Sidebar = () => {
             } `}
           >
             {Menu.icon}
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
+            <span className={`${!expandSideBar && "hidden"} origin-left duration-200`}>
               {Menu.title}
             </span>
           </li>
