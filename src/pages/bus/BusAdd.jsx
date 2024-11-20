@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../components/Form/Input";
 import { useInput } from "../../hooks/use-input";
 import {
@@ -8,9 +8,13 @@ import {
 } from "../../validation/validations";
 import { GoSync } from "react-icons/go";
 import DropDown from "../../components/Form/DropDown";
+import { fetchAllRoutes } from "../../services/apiService";
+import { useOutletContext } from "react-router-dom";
 
 const BusAdd = () => {
+
   const [loading, setLoading] = useState(false);
+  const [routes, setRoutes] = useState([]);
 
   //   {
   //     "busId": "NA-1237",
@@ -39,14 +43,25 @@ const BusAdd = () => {
   //     }
   // }
 
+  useEffect(() => {
+    // fetch road routes
+    const fetchRoutes = async () => {
+      try {
+        const response = await fetchAllRoutes();
+        setRoutes(response.data.busRoutes);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchRoutes();
+  }, []);
+
+  console.log('routes', routes);
+
   const [busTypes, setBusTypes] = useState([
     { id: 1, name: "Normal" },
     { id: 2, name: "AC" },
-  ]);
-
-  const [roadRoutes, setRoadRoutes] = useState([
-    { id: "6739f5d7f6b236ac5d03cf21", name: "Kandy - Colombo", routeNo: "1" },
-    { id: "6739f5d7f6b236ac5d03ds21", name: "Kandy - Ampara", routeNo: "22-2" },
   ]);
 
   const {
@@ -131,7 +146,8 @@ const BusAdd = () => {
   } = useInput("", isNotEmpty);
 
   const {
-    value: routeId,
+    value: routeName,
+    id: routeId,
     handleInputChange: handleRouteIdChange,
     handleInputBlur: handleRouteIdBlur,
     hasError: routeIdHasError,
@@ -173,13 +189,15 @@ const BusAdd = () => {
     setLoading(true);
   };
 
+  console.log('routeId', routeId, routeName);
+
   return (
     <div className=" font-sans">
       <h1 className=" text-xl font-bold mb-4">Register New Bus</h1>
       <div className=" ml-5">
         <form onSubmit={handleSubmit} className=" flex flex-col gap-4">
           <div className="flex flex-col gap-4 min-h-[400px] ">
-            <div className=" grid grid-cols-3">
+            <div className=" grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
               <Input
                 id="busId"
                 name="busId"
@@ -235,7 +253,7 @@ const BusAdd = () => {
                 error={busTypeHasError && "Please enter valid bus type"}
               />
             </div>
-            <div className=" grid grid-cols-3">
+            <div className=" grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
               <Input
                 id="busOwner"
                 name="busOwner"
@@ -290,7 +308,7 @@ const BusAdd = () => {
                 }
               />
             </div>
-            <div className=" grid grid-cols-3">
+            <div className=" grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
               <Input
                 id="busOwnerEmail"
                 name="busOwnerEmail"
@@ -345,10 +363,10 @@ const BusAdd = () => {
                 error={totalSeatsHasError && "Please enter valid total seats"}
               />
             </div>
-            <div className=" grid grid-cols-2">
+            <div className=" grid grid-cols-1 gap-3  md:grid-cols-2">
               <DropDown
                 id="routeId"
-                name="routeId"
+                name="routeName"
                 type="text"
                 placeholder="Ex: Kandy - Colombo"
                 containerStyle={`w-full lg:w-[350px] h-[40px]`}
@@ -356,17 +374,17 @@ const BusAdd = () => {
                 dropdownStyle={`w-full lg:w-[350px] h-[40px]`}
                 label={
                   <>
-                    Route ID <span className="text-red-600">*</span>
+                   Bus Route <span className="text-red-600">*</span>
                   </>
                 }
-                options={roadRoutes}
+                options={routes}
                 defaultOption="Select route"
-                idKey="id"
-                valueKey="name"
+                idKey="_id"
+                valueKey="routeName"
                 value={routeId}
                 onChange={handleRouteIdChange}
                 onBlur={handleRouteIdBlur}
-                error={routeIdHasError && "Please enter valid bus type"}
+                error={routeIdHasError && "Please enter valid route"}
               />
             </div>
             <div className=" mt-8">
