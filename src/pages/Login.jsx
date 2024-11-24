@@ -1,10 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GiHummingbird } from "react-icons/gi";
-import { Link } from "react-router-dom";
-import { isNotEmpty } from "../validation/validations";
-import { useInput } from "../hooks/use-input";
+import { Link, useNavigate } from "react-router-dom";
+import { isNotEmpty } from "../../validation/validations";
+import { useInput } from "../../hooks/use-input";
+import { GoSync } from "react-icons/go";
+import showToast from "../../utils/toastNotifications";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useThunk } from "../../hooks/use-thunk";
+import { signIn } from "../../store";
+import { useSelector } from "react-redux";
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const [doSignIn, isSignInLoading, signInError, signInSuccessMsg] =
+    useThunk(signIn);
+
+  const [loginSuccess, setLoginSuccess] = useState(false);
+
+  const { currentUser } = useSelector((state) => state.user);
+
   const {
     value: email,
     handleInputChange: handleEmailChange,
@@ -23,23 +39,40 @@ const Login = () => {
     reset: resetPassword,
   } = useInput("", isNotEmpty);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (emailHasError || passwordHasError) {
       return;
     }
 
-    console.log("Email: ", email);
-    console.log("Password", password);
+    doSignIn({ email, password }, "Login successful");
   };
+
+  useEffect(() => {
+    if (signInError?.error?.message) {
+      showToast("error", signInError.error.message);
+    }
+
+    if (signInSuccessMsg) {
+      showToast("success", signInSuccessMsg);
+
+      setTimeout(() => {
+        if (currentUser != null && currentUser.role === "user") {
+          showToast("warning", `Sorry, You Don't have Permission`);
+        } else {
+          navigate("/");
+        }
+      }, 2000);
+    }
+  }, [signInSuccessMsg, signInError, loginSuccess, navigate]);
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col items-center justify-center">
         <div className=" flex items-center gap-2">
           <h1 className=" max-[400px]:text-xl text-6xl font-bold text-gray-700 font-mono">
-            SLTS
+            SLTB
           </h1>
           <GiHummingbird className="max-[400px]:text-lg  text-6xl text-red-600" />
         </div>
@@ -106,24 +139,37 @@ const Login = () => {
 
           <div>
             <button
+              disabled={
+                isSignInLoading ||
+                emailHasError ||
+                passwordHasError ||
+                !email ||
+                !password
+              }
               type="submit"
               className="flex w-full justify-center rounded-md bg-red-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
             >
-              Sign in
+              {isSignInLoading ? (
+                <GoSync className="animate-spin" />
+              ) : (
+                "Sign in"
+              )}
             </button>
           </div>
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-400">
           Don't have an account?{" "}
-          <Link
-            to="/signup"
+          <button
+            // to="/register"
+            onClick={() => navigate("/register")}
             className="font-semibold leading-6 text-red-500 hover:text-red-400"
           >
             Sign up
-          </Link>
+          </button>
         </p>
       </div>
+      <ToastContainer autoClose={2000} />
     </div>
   );
 };
