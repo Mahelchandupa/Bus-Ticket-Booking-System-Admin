@@ -4,6 +4,7 @@ import Dashboard from "../pages/Dashboard";
 import RoadRouteAdd from "../pages/roadRoute/RoadRouteAdd";
 import BusAdd from "../pages/bus/BusAdd";
 import Login from "../pages/Login";
+import ProtectedRoute from "../helpers/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -12,22 +13,34 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-          element: <Dashboard />
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: '/add-road-routes',
-        element: <RoadRouteAdd />
+        path: "/add-road-routes",
+        element: (
+          <ProtectedRoute>
+            <RoadRouteAdd />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: '/add-bus',
-        element: <BusAdd />
-      }
+        path: "/add-bus",
+        element: (
+          <ProtectedRoute>
+            <BusAdd />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {
     path: "/login",
     element: <Login />,
-  }
+  },
 ]);
 
 export default router;

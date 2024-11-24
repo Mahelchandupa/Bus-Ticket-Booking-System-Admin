@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useThunk } from "../../hooks/use-thunk";
 import { signIn } from "../../store";
 import { useSelector } from "react-redux";
+import { isAuthenticated } from "../utils/isAuthenticated";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -58,10 +59,10 @@ const Login = () => {
       showToast("success", signInSuccessMsg);
 
       setTimeout(() => {
-        if (currentUser != null && currentUser.role === "user") {
-          showToast("warning", `Sorry, You Don't have Permission`);
-        } else {
+        if (isAuthenticated()) {
           navigate("/");
+        } else {
+          showToast("warning", `Sorry, You Don't have Permission`);
         }
       }, 2000);
     }
